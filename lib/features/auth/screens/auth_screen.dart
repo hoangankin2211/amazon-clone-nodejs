@@ -1,6 +1,7 @@
 import 'package:amazon/common/custom_button.dart';
 import 'package:amazon/common/widgets/custom_textfield.dart';
 import 'package:amazon/constants/global_variables.dart';
+import 'package:amazon/features/auth/services/auth_service.dart';
 import 'package:flutter/material.dart';
 
 enum Auth {
@@ -18,12 +19,23 @@ class AuthScreen extends StatefulWidget {
 class _AuthScreenState extends State<AuthScreen> {
   Auth _auth = Auth.signUp;
 
+  final AuthService authService = AuthService();
+
   final _signUpFormKey = GlobalKey<FormState>();
   final TextEditingController _email = TextEditingController();
   final TextEditingController _password = TextEditingController();
   final TextEditingController _name = TextEditingController();
 
   final _signInFormKey = GlobalKey<FormState>();
+
+  void signUpUser() {
+    authService.signUpUser(
+      email: _email.text,
+      password: _password.text,
+      name: _name.text,
+      context: context,
+    );
+  }
 
   @override
   void dispose() {
@@ -91,7 +103,14 @@ class _AuthScreenState extends State<AuthScreen> {
                           controller: _password,
                         ),
                         const SizedBox(height: 10),
-                        const CustomButton(title: 'Sign Up')
+                        CustomButton(
+                          title: 'Sign Up',
+                          onTap: () {
+                            if (_signUpFormKey.currentState!.validate()) {
+                              signUpUser();
+                            }
+                          },
+                        )
                       ],
                     ),
                   ),
@@ -133,7 +152,10 @@ class _AuthScreenState extends State<AuthScreen> {
                           controller: _password,
                         ),
                         const SizedBox(height: 10),
-                        const CustomButton(title: 'Sign Up'),
+                        const CustomButton(
+                          title: 'Sign in',
+                          onTap: null,
+                        ),
                       ],
                     ),
                   ),

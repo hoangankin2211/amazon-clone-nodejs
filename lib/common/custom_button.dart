@@ -7,12 +7,14 @@ class CustomButton extends StatelessWidget {
   const CustomButton({
     super.key,
     required this.title,
+    required this.onTap,
   });
+  final void Function()? onTap;
   final String title;
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: onTap,
       style: ElevatedButton.styleFrom(
         backgroundColor: GlobalVariables.secondaryColor,
         alignment: Alignment.center,
