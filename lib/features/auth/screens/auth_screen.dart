@@ -1,8 +1,11 @@
-import 'package:amazon/common/custom_button.dart';
+import 'package:amazon/common/widgets/custom_button.dart';
 import 'package:amazon/common/widgets/custom_textfield.dart';
 import 'package:amazon/constants/global_variables.dart';
+import 'package:amazon/features/auth/controller/auth_controller.dart';
 import 'package:amazon/features/auth/services/auth_service.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:http/http.dart';
 
 enum Auth {
   signIn,
@@ -17,22 +20,27 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
+  final authController = Get.find<AuthController>();
   Auth _auth = Auth.signUp;
-
-  final AuthService authService = AuthService();
 
   final _signUpFormKey = GlobalKey<FormState>();
   final TextEditingController _email = TextEditingController();
   final TextEditingController _password = TextEditingController();
   final TextEditingController _name = TextEditingController();
 
-  final _signInFormKey = GlobalKey<FormState>();
-
   void signUpUser() {
-    authService.signUpUser(
+    authController.signUpUser(
       email: _email.text,
       password: _password.text,
       name: _name.text,
+      context: context,
+    );
+  }
+
+  void signInUser() {
+    authController.signInUser(
+      email: _email.text,
+      password: _password.text,
       context: context,
     );
   }
@@ -152,9 +160,11 @@ class _AuthScreenState extends State<AuthScreen> {
                           controller: _password,
                         ),
                         const SizedBox(height: 10),
-                        const CustomButton(
+                        CustomButton(
                           title: 'Sign in',
-                          onTap: null,
+                          onTap: () {
+                            signInUser();
+                          },
                         ),
                       ],
                     ),

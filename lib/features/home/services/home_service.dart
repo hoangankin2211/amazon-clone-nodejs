@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:amazon/constants/error_handle.dart';
 import 'package:amazon/constants/utils.dart';
 import 'package:amazon/features/auth/controller/auth_controller.dart';
-import 'package:amazon/features/home/screens/home_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -71,20 +70,19 @@ class AuthService {
 
       final data = json.decode(response.body);
       String token = data['token'];
-      // print(data);
+
       httpErrorHandle(
           response: response,
           buildContext: context,
           onSuccess: () async {
-            // SharedPreferences sharePreference =
-            //     await SharedPreferences.getInstance();
-            print('Here');
+            SharedPreferences sharePreference =
+                await SharedPreferences.getInstance();
             _authController.setUser(response.body);
-            // await sharePreference.setString("token", token);
-            Get.to(() => const HomeScreen());
+            await sharePreference.setString("token", token);
+
             // showSnackBar(context, 'SignIn successfully');
           });
-      // print(json.decode(response.body));
+      print(json.decode(response.body));
     } catch (e) {
       rethrow;
     }

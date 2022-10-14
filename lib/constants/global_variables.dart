@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class GlobalVariables {
-  static const String uri = 'http://192.168.1.191:3000';
+  static const String uri = 'http://192.168.1.148:3000';
   static const appBarGradient = LinearGradient(
     colors: [
       Color.fromARGB(255, 29, 201, 192),
@@ -51,4 +51,5 @@ class GlobalVariables {
 
 class RouteName {
   static const authScreen = '/auth-screen';
+  static const homeScreen = '/home-screen';
 }

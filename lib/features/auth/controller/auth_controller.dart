@@ -1,19 +1,35 @@
+import 'package:amazon/models/user.dart';
+import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
 import 'package:amazon/constants/error_handle.dart';
 import 'package:amazon/constants/utils.dart';
-import 'package:amazon/features/auth/controller/auth_controller.dart';
 import 'package:amazon/features/home/screens/home_screen.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../constants/global_variables.dart';
-import '../../../models/user.dart';
 import 'package:http/http.dart' as http;
 
-class AuthService {
-  final _authController = Get.find<AuthController>();
+class AuthController extends GetxController {
+  late final Rx<String> _token;
+  Rx<User> user = Rx<User>(User(
+      email: '',
+      id: '',
+      address: 'address',
+      name: 'name',
+      password: 'password',
+      type: 'type',
+      token: 'token'));
+
+  User? get getUser {
+    return user.value;
+  }
+
+  void setUser(String temp) {
+    user.value = User.fromJson(temp);
+  }
+
   void signUpUser({
     required String email,
     required String password,
@@ -79,7 +95,7 @@ class AuthService {
             // SharedPreferences sharePreference =
             //     await SharedPreferences.getInstance();
             print('Here');
-            _authController.setUser(response.body);
+            setUser(response.body);
             // await sharePreference.setString("token", token);
             Get.to(() => const HomeScreen());
             // showSnackBar(context, 'SignIn successfully');

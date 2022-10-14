@@ -35,20 +35,26 @@ authRouter.post('/api/signin',async (req,res)=>{
     try {
         const { email, password } = req.body;
 
-        const user = User.findOne({email});
+        const user = await User.findOne({email});
 
         if (!user){
-            return res.status(400).json({msg : "User of this email doesn't exist"});
+            return res.status(400).json({
+                msg : "User of this email doesn't exist"
+            });
         }
 
-        const isMatch = password == user.password;
+        isMatch = password == user.password;
+        
+        console.log(password);
+        console.log(user.password);
+        console.log(user.email);
 
         if (!isMatch){
             return res.status(400).json({msg:"Incorrect password"});
         }
 
         const token = jwt.sign({id:user.id},"passwordKey");
-        res.json({token:token,...user.doc});
+        res.json({token,...user._doc});
     } catch (error) {
         res.status(500).json({error:e.message});
     }

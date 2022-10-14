@@ -34,4 +34,19 @@ class User {
   String toJson() {
     return json.encode(toMap());
   }
+
+  factory User.fromJson(String source) {
+    print(source);
+    Map<String, dynamic> temp = json.decode(source);
+    User user = User(
+      email: temp['email'] ?? '',
+      id: temp['id'] ?? '',
+      address: temp['address'] ?? '',
+      name: temp['name'] ?? '',
+      password: temp['password'] ?? '',
+      type: temp['type'] ?? '',
+      token: temp['token'] ?? '',
+    );
+    return user;
+  }
 }
