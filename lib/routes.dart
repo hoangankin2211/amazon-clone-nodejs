@@ -1,6 +1,8 @@
 import 'package:amazon/constants/global_variables.dart';
 import 'package:amazon/features/auth/binding/auth_binding.dart';
 import 'package:amazon/features/auth/screens/auth_screen.dart';
+import 'package:amazon/features/dashboard/binding/dashboard_binding.dart';
+import 'package:amazon/features/dashboard/screens/dashboard_screen.dart';
 import 'package:amazon/features/home/binding/home_binding.dart';
 import 'package:amazon/features/home/screens/home_screen.dart';
 import 'package:get/get.dart';
@@ -17,5 +19,10 @@ class AppPages {
       page: () => const HomeScreen(),
       binding: HomeBinding(),
     ),
+    GetPage(
+      name: RouteName.dashboardScreen,
+      page: () => const DashboardScreen(),
+      binding: DashboardBinding(),
+    )
   ];
 }

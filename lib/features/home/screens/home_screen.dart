@@ -1,4 +1,8 @@
+import 'package:amazon/constants/global_variables.dart';
 import 'package:amazon/features/auth/controller/auth_controller.dart';
+import 'package:amazon/features/dashboard/controller/dashboard_controller.dart';
+import 'package:amazon/features/home/controller/home_controller.dart';
+import 'package:amazon/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -10,14 +14,14 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final controller = Get.find<AuthController>();
+  final homeController = Get.find<HomeController>();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
+    return SafeArea(
+      child: Center(
         child: Text(
-          controller.getUser!.name + controller.getUser!.password,
+          GlobalVariables.userInfo!.name + GlobalVariables.userInfo!.password,
           style: const TextStyle(fontSize: 40),
         ),
       ),

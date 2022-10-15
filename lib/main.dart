@@ -21,23 +21,6 @@ class MyApp extends StatelessWidget {
           appBarTheme: const AppBarTheme(elevation: 5)),
       getPages: AppPages.pages,
       initialRoute: RouteName.authScreen,
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Center(
-            child: Text('Amazozo'),
-          ),
-        ),
-        body: Builder(builder: (context) {
-          return ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, RouteName.authScreen);
-              },
-              child: const Text(
-                'Navigate',
-                style: TextStyle(fontSize: 20),
-              ));
-        }),
-      ),
     );
   }
 }

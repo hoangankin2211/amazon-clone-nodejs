@@ -16,7 +16,7 @@ app.get('/hello-world', (req, res) => {
     res.json({hi:'hello world'});
 });
 app.get('/',(req,res)=>{
-    res.json({"name":"Trương Huỳnh Đức Hoàng"});
+    res.json({"name":"Own Page: Trương Huỳnh Đức Hoàng"});
 });
 
 //Connections to mongoose database

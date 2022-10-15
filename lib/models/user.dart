@@ -36,7 +36,7 @@ class User {
   }
 
   factory User.fromJson(String source) {
-    print(source);
+    print("User.fromJson$source");
     Map<String, dynamic> temp = json.decode(source);
     User user = User(
       email: temp['email'] ?? '',

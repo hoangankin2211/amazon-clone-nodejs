@@ -1,6 +1,7 @@
 
 const express = require("express");
 const jwt = require("jsonwebtoken"); 
+const getUserData = require("../middleware/userData");
 const User = require("../models/user");
 const authRouter = express.Router();
 
@@ -45,19 +46,48 @@ authRouter.post('/api/signin',async (req,res)=>{
 
         isMatch = password == user.password;
         
-        console.log(password);
-        console.log(user.password);
-        console.log(user.email);
-
         if (!isMatch){
             return res.status(400).json({msg:"Incorrect password"});
         }
 
         const token = jwt.sign({id:user.id},"passwordKey");
+
         res.json({token,...user._doc});
     } catch (error) {
         res.status(500).json({error:e.message});
     }
 });
+
+//Check token to sign in automatically
+authRouter.post('/api/checkTokenValid', async (req,res)=>{
+    try {
+        const token = req.header("token");
+        
+        if (!token){
+            res.json({isValid:false});
+        }
+
+        const verify = jwt.verify(token,"passwordKey");
+        if (!verify) {
+            
+            res.json(false);
+        }
+        console.log("verify.id: "+verify.id);
+        console.log(token);
+        const user = await User.findById(verify.id);
+        console.log(user.name);
+        if (!user){
+            res.json({isValid:false});
+        }
+        res.json({isValid:true,...user._doc});
+    } catch (error) {
+        res.status(500).json({error:e.message});
+    }
+});
+
+authRouter.get('/get-user-data',getUserData,async(res,req)=>{
+    const user = await User.findById(req.user);
+    res.json({token:res.token,...user._doc});
+}); 
 
 module.exports = authRouter;

@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 
+import '../models/user.dart';
+
 class GlobalVariables {
-  static const String uri = 'http://192.168.1.148:3000';
+  static const String uri = 'http://10.0.21.77:3000';
+  static late final User? userInfo;
+
   static const appBarGradient = LinearGradient(
     colors: [
       Color.fromARGB(255, 29, 201, 192),
@@ -52,4 +56,12 @@ class GlobalVariables {
 class RouteName {
   static const authScreen = '/auth-screen';
   static const homeScreen = '/home-screen';
+  static const dashboardScreen = '/dashboard-screen';
+}
+
+class ApiAddress {
+  static const signIn = '/api/signin';
+  static const signUp = '/api/signup';
+  static const checkToken = '/api/checkTokenValid';
+  static const getUserData = '/get-user-data';
 }
