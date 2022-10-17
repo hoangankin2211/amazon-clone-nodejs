@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/user.dart';
 
 class GlobalVariables {
-  static const String uri = 'http://10.0.21.77:3000';
+  static const String uri = 'http://10.0.22.188:3000';
   static late final User? userInfo;
 
   static const appBarGradient = LinearGradient(
@@ -13,6 +13,13 @@ class GlobalVariables {
     ],
     stops: [0.5, 1.0],
   );
+
+  static const List<String> textAccountButton = [
+    'Your Orders',
+    'Turn Seller',
+    'Log out',
+    'Your Wish List',
+  ];
 
   static const secondaryColor = Color.fromRGBO(255, 153, 0, 1);
   static const backgroundColor = Colors.white;
