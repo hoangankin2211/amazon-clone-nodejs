@@ -32,6 +32,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
   Future handleFutureService(Auth service) async {
     if (service == Auth.signIn) {
+      GlobalVariables.userInfo = authController.getUser!;
       authController.signInUser(
         email: _email.text,
         password: _password.text,
@@ -48,7 +49,11 @@ class _AuthScreenState extends State<AuthScreen> {
       final checkToken = await authController.isTokenValid();
       if (checkToken) {
         GlobalVariables.userInfo = authController.getUser!;
-        Get.offAndToNamed(RouteName.dashboardScreen);
+        if (GlobalVariables.userInfo!.type == 'user') {
+          Get.offAndToNamed(RouteName.dashboardScreen);
+        } else {
+          Get.offAndToNamed(RouteName.adminScreen);
+        }
         return false;
       } else {
         auth.value = Auth.signIn;

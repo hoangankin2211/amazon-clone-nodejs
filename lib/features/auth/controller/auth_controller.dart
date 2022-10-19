@@ -98,7 +98,11 @@ class AuthController extends GetxController {
             setUser(response.body);
             // showSnackBar(context, 'SignIn successfully');
             await sharePreference.setString("token", token);
-            Get.to(() => const HomeScreen());
+            if (user.value.type == 'user') {
+              Get.offAndToNamed(RouteName.homeScreen);
+            } else {
+              Get.offAndToNamed(RouteName.adminScreen);
+            }
           });
     } catch (e) {
       rethrow;

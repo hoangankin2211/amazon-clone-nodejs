@@ -61,7 +61,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       bottomNavigationBar: Obx(() {
         return CustomBottomBar(
           currentPage: dashboardController.pageNumber.value,
-          itemsData: dashboardController.bottomBarItem,
+          itemsData: dashboardController.bottomBarItemUser,
           selectPage: selectPage,
         );
       }),

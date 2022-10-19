@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../models/user.dart';
 
 class GlobalVariables {
@@ -64,6 +63,7 @@ class RouteName {
   static const authScreen = '/auth-screen';
   static const homeScreen = '/home-screen';
   static const dashboardScreen = '/dashboard-screen';
+  static const adminScreen = '/admin-screen';
 }
 
 class ApiAddress {

@@ -8,10 +8,16 @@ import '../../home/screens/home_screen.dart';
 class DashboardController extends GetxController {
   var pageNumber = 0.obs;
 
-  final List<Map<String, dynamic>> bottomBarItem = [
-    {'icon': Icons.home, 'label': 'Home'},
-    {'icon': Icons.person, 'label': 'Person'},
-    {'icon': Icons.shopping_cart, 'label': 'Cart'},
+  final List<Map<String, dynamic>> bottomBarItemUser = [
+    {'icon': Icons.home_outlined, 'label': 'Home'},
+    {'icon': Icons.person_outlined, 'label': 'Person'},
+    {'icon': Icons.shopping_cart_outlined, 'label': 'Cart'},
+  ];
+
+  final List<Map<String, dynamic>> bottomBarItemAdmin = [
+    {'icon': Icons.home_outlined, 'label': 'Home'},
+    {'icon': Icons.analytics_outlined, 'label': 'Analyst'},
+    {'icon': Icons.shopping_cart_outlined, 'label': 'Cart'},
   ];
 
   final List<Widget> pages = [

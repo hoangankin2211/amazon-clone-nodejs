@@ -1,4 +1,5 @@
 import 'package:amazon/constants/global_variables.dart';
+import 'package:amazon/features/admin/screens/admin_screen.dart';
 import 'package:amazon/features/auth/binding/auth_binding.dart';
 import 'package:amazon/features/auth/screens/auth_screen.dart';
 import 'package:amazon/features/dashboard/binding/dashboard_binding.dart';
@@ -23,6 +24,10 @@ class AppPages {
       name: RouteName.dashboardScreen,
       page: () => const DashboardScreen(),
       binding: DashboardBinding(),
-    )
+    ),
+    GetPage(
+      name: RouteName.adminScreen,
+      page: () => const AdminScreen(),
+    ),
   ];
 }
