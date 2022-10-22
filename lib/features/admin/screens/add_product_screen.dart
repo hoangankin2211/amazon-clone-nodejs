@@ -1,8 +1,9 @@
+import 'dart:io';
+
 import 'package:amazon/common/widgets/custom_button.dart';
 import 'package:amazon/common/widgets/custom_textfield.dart';
-import 'package:amazon/features/admin/screens/admin_screen.dart';
 import 'package:amazon/features/admin/widgets/custom_select_file.dart';
-import 'package:dotted_border/dotted_border.dart';
+import 'package:amazon/features/admin/widgets/image_placeholder.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -17,8 +18,10 @@ class AddProductScreen extends StatefulWidget {
 }
 
 class _AddProductScreenState extends State<AddProductScreen> {
-  GlobalKey formController = GlobalKey<FormState>();
+  final formController = GlobalKey<FormState>();
   final adminController = Get.find<AdminController>();
+
+  Rx<List<File>> images = Rx<List<File>>([]);
 
   late Rx<String> currentText = adminController.categoriesItem[0].obs;
 
@@ -26,6 +29,27 @@ class _AddProductScreenState extends State<AddProductScreen> {
   TextEditingController description = TextEditingController();
   TextEditingController price = TextEditingController();
   TextEditingController quantity = TextEditingController();
+
+  void selectImages() async {
+    List<File> result = await adminController.imagePicker();
+    images.value = result;
+  }
+
+  void _addProduct() {
+    if (formController.currentState!.validate() && images.value.isNotEmpty) {
+      adminController.sellProduct(
+        context: context,
+        name: productName.text,
+        description: description.text,
+        price: double.parse(price.text),
+        quantity: double.parse(quantity.text),
+        category: currentText.value,
+        image: images.value,
+      );
+    } else {
+      print("error bro");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,24 +89,35 @@ class _AddProductScreenState extends State<AddProductScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CustomSelectFile(
-                  height: Get.height * 0.35,
-                  width: Get.width,
-                  title: 'Select Product Image',
-                ),
+                Obx(() {
+                  return images.value.isEmpty
+                      ? GestureDetector(
+                          onTap: selectImages,
+                          child: CustomSelectFile(
+                            height: Get.height * 0.35,
+                            width: Get.width,
+                            title: 'Select Product Image',
+                          ),
+                        )
+                      : SizedBox(
+                          height: Get.height * 0.35,
+                          width: Get.width,
+                          child: ImagePlaceholder(images: images.value),
+                        );
+                }),
                 const SizedBox(height: 10),
                 CustomTextField(
                     controller: productName, hintText: 'Product Name'),
                 const SizedBox(height: 5),
                 CustomTextField(
-                  controller: productName,
+                  controller: description,
                   hintText: 'Descriptions',
                   maxLine: 5,
                 ),
                 const SizedBox(height: 5),
-                CustomTextField(controller: productName, hintText: 'Price'),
+                CustomTextField(controller: price, hintText: 'Price'),
                 const SizedBox(height: 5),
-                CustomTextField(controller: productName, hintText: 'Quantity'),
+                CustomTextField(controller: quantity, hintText: 'Quantity'),
                 const SizedBox(height: 5),
                 Obx(() {
                   return DropdownButton(
@@ -103,7 +138,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 }),
                 CustomButton(
                   title: 'Sell',
-                  onTap: () {},
+                  onTap: _addProduct,
                 ),
               ],
             ),

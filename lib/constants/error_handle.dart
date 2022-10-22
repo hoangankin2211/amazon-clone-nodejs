@@ -20,6 +20,7 @@ void httpErrorHandle({
       showSnackBar(buildContext, jsonDecode(response.body)['error']);
       break;
     default:
+      print('default');
       break;
   }
 }

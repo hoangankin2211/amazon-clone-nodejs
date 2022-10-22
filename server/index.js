@@ -1,6 +1,7 @@
 const express = require('express');
 const authRouter = require('./routers/auth.js');
 const mongoose = require('mongoose');
+const adminRouter = require('./routers/admin.js');
 
 const PORT = 3000;
 const app = express();
@@ -10,6 +11,7 @@ const linkDataBase = 'mongodb+srv://hoangankin123:hoangankin123@cluster0.lb1vuxi
 //middleware
 app.use(express.json());
 app.use(authRouter);
+app.use(adminRouter);
 
 //Creating GET
 app.get('/hello-world', (req, res) => {

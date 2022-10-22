@@ -1,8 +1,12 @@
 
 const express = require("express");
-const jwt = require("jsonwebtoken"); 
+
+const jwt = require("jsonwebtoken");
+
 const getUserData = require("../middleware/userData");
+
 const User = require("../models/user");
+
 const authRouter = express.Router();
 
 //SignIn Route
@@ -34,6 +38,7 @@ authRouter.post('/api/signup', async (req, res) => {
 //SignUp Route
 authRouter.post('/api/signin',async (req,res)=>{
     try {
+        
         const { email, password } = req.body;
 
         const user = await User.findOne({email});
@@ -79,7 +84,7 @@ authRouter.post('/api/checkTokenValid', async (req,res)=>{
         if (!user){
             res.json({isValid:false});
         }
-        res.json({isValid:true,...user._doc});
+        res.json({isValid:true,...user._doc,token});
     } catch (error) {
         res.status(500).json({error:e.message});
     }
