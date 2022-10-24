@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:amazon/constants/error_handle.dart';
@@ -21,7 +22,7 @@ class AdminController extends GetxController {
     {'icon': Icons.shopping_cart_outlined, 'label': 'Cart'},
   ];
 
-  List<String> categoriesItem = [
+  final List<String> categoriesItem = [
     'Mobiles',
     'Appliances',
     'Books',
@@ -31,7 +32,7 @@ class AdminController extends GetxController {
   ];
 
   final List<Widget> pages = [
-    const PostScreen(),
+    PostScreen(),
     const SizedBox(
       height: double.infinity,
       width: double.infinity,
@@ -43,6 +44,31 @@ class AdminController extends GetxController {
       width: double.infinity,
     ),
   ];
+  Rx<List<Product>> products = Rx<List<Product>>([]);
+
+  //////////////////////////////////////////
+  @override
+  void onClose() {
+    products.close();
+    super.onClose();
+  }
+
+  @override
+  void onReady() async {
+    super.onReady();
+    // products.addListener(GetStream(
+    //   onListen: () => update(['PostScreenGrid']),
+    // ));
+
+    products.listen((p0) => update(['PostScreenGrid']));
+
+    await fetchAllProduct(null);
+  }
+  //////////////////////////////////////////
+
+  List<Product> get getListProduct {
+    return products.value;
+  }
 
   Future<List<File>> imagePicker() async {
     List<File> images = [];
@@ -108,11 +134,12 @@ class AdminController extends GetxController {
 
       httpErrorHandle(
           response: response,
-          buildContext: context,
           onSuccess: () {
+            Get.back();
             Get.showSnackbar(const GetSnackBar(
               title: 'Announcement',
               message: 'Add product successful',
+              duration: Duration(seconds: 3),
             ));
           });
 
@@ -124,6 +151,83 @@ class AdminController extends GetxController {
           message: e.toString(),
         ),
       );
+      return false;
+    }
+  }
+
+  Future<bool> getProduct(String name, BuildContext context) async {
+    try {
+      final response = await http.get(
+        Uri.parse(GlobalVariables.uri + ApiAddress.getProduct),
+        headers: {
+          'token': GlobalVariables.userInfo!.token,
+          'name': name,
+          "Content-Type": 'application/json;charset=UTF-8',
+        },
+      );
+      httpErrorHandle(
+        response: response,
+        onSuccess: () {
+          final extractData =
+              json.decode(response.body) as Map<String, dynamic>;
+          print(extractData.toString());
+          // Product product = Product.fromMap(extractData['product']);
+        },
+      );
+      return true;
+    } catch (e) {
+      print('getProduct: $e');
+      return false;
+    }
+  }
+
+  Future<bool> deleteProduct(String idProduct) async {
+    try {
+      final response = http.post(
+        Uri.parse(GlobalVariables.uri + ApiAddress.deleteProduct),
+        headers: {
+          'token': GlobalVariables.userInfo!.token,
+          'id': idProduct,
+          "Content-Type": 'application/json;charset=UTF-8',
+        },
+      );
+
+      return true;
+    } catch (error) {
+      print(error.toString());
+      return false;
+    }
+  }
+
+  Future<bool> fetchAllProduct(BuildContext? context) async {
+    try {
+      final response = await http.get(
+        Uri.parse(GlobalVariables.uri + ApiAddress.fetchAllProduct),
+        headers: {
+          'token': GlobalVariables.userInfo!.token,
+          "Content-Type": 'application/json;charset=UTF-8',
+        },
+      );
+
+      final extractData = json.decode(response.body) as List<dynamic>;
+      for (var element in extractData) {
+        products.value.add(Product.fromMap(element as Map<String, dynamic>));
+        update(['PostScreenGrid']);
+      }
+      httpErrorHandle(
+        response: response,
+        onSuccess: () {
+          final extractData = json.decode(response.body) as List<dynamic>;
+          for (var element in extractData) {
+            products.value
+                .add(Product.fromMap(element as Map<String, dynamic>));
+          }
+        },
+      );
+
+      return true;
+    } catch (e) {
+      print(e.toString());
       return false;
     }
   }

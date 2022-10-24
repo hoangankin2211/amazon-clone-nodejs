@@ -41,7 +41,6 @@ class AuthService {
 
       httpErrorHandle(
           response: response,
-          buildContext: context,
           onSuccess: () {
             showSnackBar(context, 'Account created !');
           });
@@ -74,7 +73,6 @@ class AuthService {
       // print(data);
       httpErrorHandle(
           response: response,
-          buildContext: context,
           onSuccess: () async {
             // SharedPreferences sharePreference =
             //     await SharedPreferences.getInstance();

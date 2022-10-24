@@ -1,4 +1,5 @@
 import 'package:amazon/constants/global_variables.dart';
+import 'package:amazon/features/admin/screens/post_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

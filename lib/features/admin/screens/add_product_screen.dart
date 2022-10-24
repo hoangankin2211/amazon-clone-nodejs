@@ -30,14 +30,16 @@ class _AddProductScreenState extends State<AddProductScreen> {
   TextEditingController price = TextEditingController();
   TextEditingController quantity = TextEditingController();
 
+  final Rx<bool> _isLoading = false.obs;
+
   void selectImages() async {
     List<File> result = await adminController.imagePicker();
     images.value = result;
   }
 
-  void _addProduct() {
+  Future<bool> _addProduct() async {
     if (formController.currentState!.validate() && images.value.isNotEmpty) {
-      adminController.sellProduct(
+      final result = await adminController.sellProduct(
         context: context,
         name: productName.text,
         description: description.text,
@@ -46,105 +48,128 @@ class _AddProductScreenState extends State<AddProductScreen> {
         category: currentText.value,
         image: images.value,
       );
+      return result;
     } else {
-      print("error bro");
+      debugPrint("error at '_addProduct()'");
+      return false;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(50),
-        child: AppBar(
-          leading: IconButton(
-            onPressed: Get.back,
-            icon: const Icon(
-              Icons.arrow_back_ios_outlined,
-              color: Colors.black,
-            ),
-          ),
-          elevation: 0,
-          flexibleSpace: Container(
-            decoration: const BoxDecoration(
-              gradient: GlobalVariables.appBarGradient,
-            ),
-          ),
-          centerTitle: true,
-          title: const Text(
-            'Add Product',
-            style: TextStyle(
-              fontSize: 26,
-              fontWeight: FontWeight.w500,
-              color: Colors.black,
-            ),
-          ),
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-          child: Form(
-            key: formController,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Obx(() {
-                  return images.value.isEmpty
-                      ? GestureDetector(
-                          onTap: selectImages,
-                          child: CustomSelectFile(
-                            height: Get.height * 0.35,
-                            width: Get.width,
-                            title: 'Select Product Image',
+    return Obx(
+      () {
+        return _isLoading.value
+            ? const Scaffold(
+                body: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              )
+            : Scaffold(
+                appBar: PreferredSize(
+                  preferredSize: const Size.fromHeight(50),
+                  child: AppBar(
+                    leading: IconButton(
+                      onPressed: Get.back,
+                      icon: const Icon(
+                        Icons.arrow_back_ios_outlined,
+                        color: Colors.black,
+                      ),
+                    ),
+                    elevation: 0,
+                    flexibleSpace: Container(
+                      decoration: const BoxDecoration(
+                        gradient: GlobalVariables.appBarGradient,
+                      ),
+                    ),
+                    centerTitle: true,
+                    title: const Text(
+                      'Add Product',
+                      style: TextStyle(
+                        fontSize: 26,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ),
+                body: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 15, vertical: 20),
+                    child: Form(
+                      key: formController,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Obx(() {
+                            return images.value.isEmpty
+                                ? GestureDetector(
+                                    onTap: selectImages,
+                                    child: CustomSelectFile(
+                                      height: Get.height * 0.35,
+                                      width: Get.width,
+                                      title: 'Select Product Image',
+                                    ),
+                                  )
+                                : SizedBox(
+                                    height: Get.height * 0.35,
+                                    width: Get.width,
+                                    child:
+                                        ImagePlaceholder(images: images.value),
+                                  );
+                          }),
+                          const SizedBox(height: 10),
+                          CustomTextField(
+                              controller: productName,
+                              hintText: 'Product Name'),
+                          const SizedBox(height: 5),
+                          CustomTextField(
+                            controller: description,
+                            hintText: 'Descriptions',
+                            maxLine: 5,
                           ),
-                        )
-                      : SizedBox(
-                          height: Get.height * 0.35,
-                          width: Get.width,
-                          child: ImagePlaceholder(images: images.value),
-                        );
-                }),
-                const SizedBox(height: 10),
-                CustomTextField(
-                    controller: productName, hintText: 'Product Name'),
-                const SizedBox(height: 5),
-                CustomTextField(
-                  controller: description,
-                  hintText: 'Descriptions',
-                  maxLine: 5,
+                          const SizedBox(height: 5),
+                          CustomTextField(controller: price, hintText: 'Price'),
+                          const SizedBox(height: 5),
+                          CustomTextField(
+                              controller: quantity, hintText: 'Quantity'),
+                          const SizedBox(height: 5),
+                          Obx(
+                            () {
+                              return DropdownButton(
+                                elevation: 5,
+                                icon:
+                                    const Icon(Icons.arrow_drop_down_outlined),
+                                alignment: Alignment.center,
+                                value: currentText.value,
+                                items: adminController.categoriesItem
+                                    .map((category) => DropdownMenuItem<String>(
+                                          value: category,
+                                          child: Text(category),
+                                        ))
+                                    .toList(),
+                                onChanged: (value) {
+                                  currentText.value = value ?? " ";
+                                },
+                              );
+                            },
+                          ),
+                          CustomButton(
+                            title: 'Sell',
+                            onTap: () async {
+                              _isLoading.value = true;
+                              await _addProduct();
+                              _isLoading.value = false;
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
-                const SizedBox(height: 5),
-                CustomTextField(controller: price, hintText: 'Price'),
-                const SizedBox(height: 5),
-                CustomTextField(controller: quantity, hintText: 'Quantity'),
-                const SizedBox(height: 5),
-                Obx(() {
-                  return DropdownButton(
-                    elevation: 5,
-                    icon: const Icon(Icons.arrow_drop_down_outlined),
-                    alignment: Alignment.center,
-                    value: currentText.value,
-                    items: adminController.categoriesItem
-                        .map((category) => DropdownMenuItem<String>(
-                              value: category,
-                              child: Text(category),
-                            ))
-                        .toList(),
-                    onChanged: (value) {
-                      currentText.value = value ?? " ";
-                    },
-                  );
-                }),
-                CustomButton(
-                  title: 'Sell',
-                  onTap: _addProduct,
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
+              );
+      },
     );
   }
 }

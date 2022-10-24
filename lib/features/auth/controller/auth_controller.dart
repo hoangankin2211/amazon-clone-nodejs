@@ -57,7 +57,6 @@ class AuthController extends GetxController {
 
       httpErrorHandle(
         response: response,
-        buildContext: context,
         onSuccess: () {
           showSnackBar(context, 'Account created !');
         },
@@ -91,7 +90,6 @@ class AuthController extends GetxController {
 
       httpErrorHandle(
           response: response,
-          buildContext: context,
           onSuccess: () async {
             SharedPreferences sharePreference =
                 await SharedPreferences.getInstance();

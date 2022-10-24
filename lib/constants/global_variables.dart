@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/user.dart';
 
 class GlobalVariables {
-  static const String uri = 'http://10.0.20.242:3000';
+  static const String uri = 'http://10.0.20.131:3000';
   static late final User? userInfo;
 
   static const appBarGradient = LinearGradient(
@@ -72,4 +72,7 @@ class ApiAddress {
   static const checkToken = '/api/checkTokenValid';
   static const getUserData = '/get-user-data';
   static const sellProduct = '/admin/addProduct';
+  static const getProduct = '/admin/getProduct';
+  static const fetchAllProduct = '/admin/fetchAllProductData';
+  static const deleteProduct = '/admin/deleteProduct';
 }
