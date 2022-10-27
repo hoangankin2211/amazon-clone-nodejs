@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import '../models/user.dart';
 
 class GlobalVariables {
-  static const String uri = 'http://10.0.20.131:3000';
+  //Jangnam = 10.0.21.222
+  //At home = 192.168.1.182
+  static const String uri = 'http://10.0.21.222:3000';
   static late final User? userInfo;
 
   static const appBarGradient = LinearGradient(
@@ -64,13 +66,20 @@ class RouteName {
   static const homeScreen = '/home-screen';
   static const dashboardScreen = '/dashboard-screen';
   static const adminScreen = '/admin-screen';
+  static const categoryDealScreen = '/category_deal_screen';
+  static const searchScreen = '/search_screen';
 }
 
 class ApiAddress {
   static const signIn = '/api/signin';
   static const signUp = '/api/signup';
   static const checkToken = '/api/checkTokenValid';
+  static const getAllProductCategory = '/api/product?category=';
   static const getUserData = '/get-user-data';
+  static const searchProduct = '/api/product/search';
+  static const dealOfTheDay = '/api/product/deal-of-the-day';
+  static const addProductToCart = '/api/user/add-to-cart';
+
   static const sellProduct = '/admin/addProduct';
   static const getProduct = '/admin/getProduct';
   static const fetchAllProduct = '/admin/fetchAllProductData';

@@ -2,9 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class PostScreenItem extends StatelessWidget {
-  const PostScreenItem({super.key, required this.image, required this.title});
+  const PostScreenItem({
+    super.key,
+    required this.image,
+    required this.title,
+    required this.id,
+    required this.deleteProduct,
+  });
   final String image;
   final String title;
+  final String id;
+  final Function() deleteProduct;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -35,7 +44,13 @@ class PostScreenItem extends StatelessWidget {
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [Text(title), const Icon(Icons.delete_outlined)],
+          children: [
+            Text(title),
+            IconButton(
+              onPressed: deleteProduct,
+              icon: const Icon(Icons.delete_outlined),
+            ),
+          ],
         )
       ],
     );

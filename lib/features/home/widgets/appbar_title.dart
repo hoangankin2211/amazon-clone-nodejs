@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 
 class AppBarTitle extends StatelessWidget {
-  const AppBarTitle({super.key, required this.searchController});
+  const AppBarTitle({
+    super.key,
+    required this.searchController,
+    required this.navigateToPage,
+  });
   final TextEditingController searchController;
+  final void Function(String) navigateToPage;
 
   @override
   Widget build(BuildContext context) {
@@ -16,6 +21,7 @@ class AppBarTitle extends StatelessWidget {
                 color: Colors.white,
                 border: Border.all(width: 1.5, color: Colors.grey)),
             child: TextFormField(
+              onFieldSubmitted: navigateToPage,
               controller: searchController,
               decoration: InputDecoration(
                 enabledBorder: InputBorder.none,
@@ -26,7 +32,7 @@ class AppBarTitle extends StatelessWidget {
                   color: Colors.grey,
                 ),
                 prefixIcon: InkWell(
-                  onTap: () {},
+                  onTap: () => navigateToPage(searchController.text),
                   child: const Icon(
                     Icons.search,
                     color: Colors.black,

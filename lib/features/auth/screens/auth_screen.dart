@@ -46,6 +46,7 @@ class _AuthScreenState extends State<AuthScreen> {
         context: context,
       );
     } else if (service == Auth.token) {
+      print('heere');
       final checkToken = await authController.isTokenValid();
       if (checkToken) {
         GlobalVariables.userInfo = authController.getUser!;

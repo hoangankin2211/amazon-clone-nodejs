@@ -1,11 +1,18 @@
+import 'package:amazon/features/admin/controller/admin_controller.dart';
 import 'package:amazon/features/admin/widgets/post_screen_item.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../../models/product.dart';
 
 class PostScreenGrid extends StatelessWidget {
-  const PostScreenGrid({super.key, required this.products});
+  PostScreenGrid({super.key, required this.products});
   final List<Product> products;
+  final adminController = Get.find<AdminController>();
+  void deleteProduct(String id) async {
+    await adminController.deleteProduct(id);
+  }
+
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
@@ -14,6 +21,10 @@ class PostScreenGrid extends StatelessWidget {
       itemBuilder: (context, index) => PostScreenItem(
         image: products[index].images.first,
         title: products[index].description,
+        deleteProduct: () {
+          deleteProduct(products[index].id!);
+        },
+        id: products[index].id ?? " ",
       ),
       itemCount: products.length,
     );

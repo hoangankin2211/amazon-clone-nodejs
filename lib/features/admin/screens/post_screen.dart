@@ -37,10 +37,10 @@ class PostScreen extends StatelessWidget {
           const SizedBox(height: 10),
           ConstrainedBox(
             constraints: BoxConstraints(
-                maxHeight: Get.height * 0.7, maxWidth: Get.width),
+                maxHeight: Get.height * 0.8, maxWidth: Get.width),
             child: GetBuilder<AdminController>(
               id: 'PostScreenGrid',
-              builder: (context) {
+              builder: (adminController) {
                 return PostScreenGrid(products: adminController.getListProduct);
               },
             ),

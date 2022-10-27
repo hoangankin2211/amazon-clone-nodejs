@@ -1,8 +1,7 @@
 const express = require('express');
 const adminRouter = express.Router();
 const admin = require('../middleware/admin');
-const getProduct = require('../middleware/get_product');
-const Product = require('../models/product');
+const {Product} = require('../models/product');
 
 adminRouter.post("/admin/addProduct", admin, async (req,res) => {
     try {
@@ -48,12 +47,18 @@ adminRouter.get('/admin/fetchAllProductData',admin,async (req,res) => {
 adminRouter.post('/admin/deleteProduct',admin,async (req,res) => {
     try {
         
-        const {id} = req.header;
+        const {id} = req.body;
+
+        console.log(id);
         
-        let product = await Product.findByIdAndDelete({id});
-        product = await product.save();
-        res.json(product);
-        
+        let product = await Product.findByIdAndDelete(id);
+        let productTemp = await Product.findById(id)
+        if (productTemp == null){
+            res.json({isSuccess:false,product});
+        }
+        else {
+            res.json({isSuccess:true,product});
+        }
     } catch (error) {
         console.log(error.message);
         res.status(500).json({error:error.message});

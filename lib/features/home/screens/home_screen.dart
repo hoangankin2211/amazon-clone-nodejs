@@ -3,6 +3,7 @@ import 'package:amazon/features/home/controller/home_controller.dart';
 import 'package:amazon/features/home/widgets/appbar_title.dart';
 import 'package:amazon/features/home/widgets/categories_item.dart';
 import 'package:amazon/features/home/widgets/categories_list.dart';
+import 'package:amazon/features/home/widgets/deal_of_day.dart';
 import 'package:amazon/features/home/widgets/list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -40,6 +41,10 @@ class _HomeScreenState extends State<HomeScreen> {
     },
   ];
 
+  void onTextFormFieldComplete(String query) {
+    Get.toNamed(RouteName.searchScreen, arguments: query);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,7 +59,10 @@ class _HomeScreenState extends State<HomeScreen> {
           decoration:
               const BoxDecoration(gradient: GlobalVariables.appBarGradient),
         ),
-        title: AppBarTitle(searchController: homeController.searchController),
+        title: AppBarTitle(
+          searchController: homeController.searchController,
+          navigateToPage: onTextFormFieldComplete,
+        ),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -117,6 +125,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   fontSize: 25,
                   fontWeight: FontWeight.w500,
                 ),
+              ),
+              const DealOfDay(),
+              const Divider(
+                thickness: 1.5,
               ),
               SizedBox(
                 height: Get.height * 0.4,

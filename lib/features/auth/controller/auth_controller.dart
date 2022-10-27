@@ -6,7 +6,6 @@ import 'dart:convert';
 
 import 'package:amazon/constants/error_handle.dart';
 import 'package:amazon/constants/utils.dart';
-import 'package:amazon/features/home/screens/home_screen.dart';
 
 import '../../../constants/global_variables.dart';
 import 'package:http/http.dart' as http;
@@ -14,14 +13,7 @@ import 'package:http/http.dart' as http;
 class AuthController extends GetxController {
   final Rx<String?> _token = Rx<String?>(null);
 
-  Rx<User> user = Rx<User>(User(
-      email: '',
-      id: '',
-      address: 'address',
-      name: 'name',
-      password: 'password',
-      type: 'type',
-      token: 'token'));
+  Rx<User?> user = Rx<User?>(null);
 
   User? get getUser {
     return user.value;
@@ -46,6 +38,7 @@ class AuthController extends GetxController {
         password: password,
         type: '',
         token: '',
+        carts: [],
       );
       final response = await http.post(
         Uri.parse(GlobalVariables.uri + ApiAddress.signUp),
@@ -96,7 +89,7 @@ class AuthController extends GetxController {
             setUser(response.body);
             // showSnackBar(context, 'SignIn successfully');
             await sharePreference.setString("token", token);
-            if (user.value.type == 'user') {
+            if (user.value!.type == 'user') {
               Get.offAndToNamed(RouteName.homeScreen);
             } else {
               Get.offAndToNamed(RouteName.adminScreen);
@@ -127,8 +120,8 @@ class AuthController extends GetxController {
       if (finalResponse['isValid']) {
         _token.value = token;
         setUser(response.body);
-        print("user.value.id${user.value.id}");
-        print(user.value.email);
+        print("user.value.id${user.value!.id}");
+        print(user.value!.email);
       } else {
         _token.value = null;
       }

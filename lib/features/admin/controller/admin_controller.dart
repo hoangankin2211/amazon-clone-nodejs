@@ -53,15 +53,19 @@ class AdminController extends GetxController {
     super.onClose();
   }
 
+  void _addProductToList(Product product) {
+    products.value.add(product);
+    update(['PostScreenGrid']);
+  }
+
+  void _deleteProductInList(String id) {
+    products.value.removeWhere((element) => element.id == id);
+    update(['PostScreenGrid']);
+  }
+
   @override
   void onReady() async {
     super.onReady();
-    // products.addListener(GetStream(
-    //   onListen: () => update(['PostScreenGrid']),
-    // ));
-
-    products.listen((p0) => update(['PostScreenGrid']));
-
     await fetchAllProduct(null);
   }
   //////////////////////////////////////////
@@ -133,15 +137,17 @@ class AdminController extends GetxController {
       print(response.statusCode);
 
       httpErrorHandle(
-          response: response,
-          onSuccess: () {
-            Get.back();
-            Get.showSnackbar(const GetSnackBar(
-              title: 'Announcement',
-              message: 'Add product successful',
-              duration: Duration(seconds: 3),
-            ));
-          });
+        response: response,
+        onSuccess: () {
+          _addProductToList(product);
+          Get.back();
+          Get.showSnackbar(const GetSnackBar(
+            title: 'Announcement',
+            message: 'Add product successful',
+            duration: Duration(seconds: 3),
+          ));
+        },
+      );
 
       return true;
     } catch (e) {
@@ -183,14 +189,23 @@ class AdminController extends GetxController {
 
   Future<bool> deleteProduct(String idProduct) async {
     try {
-      final response = http.post(
+      print(idProduct);
+      final response = await http.post(
         Uri.parse(GlobalVariables.uri + ApiAddress.deleteProduct),
         headers: {
           'token': GlobalVariables.userInfo!.token,
-          'id': idProduct,
           "Content-Type": 'application/json;charset=UTF-8',
         },
+        body: jsonEncode({
+          'id': idProduct,
+        }),
       );
+
+      final extractData = json.decode(response.body);
+
+      _deleteProductInList(idProduct);
+
+      print(extractData);
 
       return true;
     } catch (error) {
@@ -210,9 +225,10 @@ class AdminController extends GetxController {
       );
 
       final extractData = json.decode(response.body) as List<dynamic>;
+      products.value.clear();
+      print(extractData);
       for (var element in extractData) {
-        products.value.add(Product.fromMap(element as Map<String, dynamic>));
-        update(['PostScreenGrid']);
+        _addProductToList(Product.fromMap(element as Map<String, dynamic>));
       }
       httpErrorHandle(
         response: response,

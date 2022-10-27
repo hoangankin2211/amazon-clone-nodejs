@@ -6,6 +6,8 @@ import 'package:amazon/features/dashboard/binding/dashboard_binding.dart';
 import 'package:amazon/features/dashboard/screens/dashboard_screen.dart';
 import 'package:amazon/features/home/binding/home_binding.dart';
 import 'package:amazon/features/home/screens/home_screen.dart';
+import 'package:amazon/features/home/screens/category_deal_screen.dart';
+import 'package:amazon/features/home/screens/search_sreen.dart';
 import 'package:get/get.dart';
 
 class AppPages {
@@ -28,6 +30,14 @@ class AppPages {
     GetPage(
       name: RouteName.adminScreen,
       page: () => const AdminScreen(),
+    ),
+    GetPage(
+      name: RouteName.categoryDealScreen,
+      page: () => const CategoryDealScreen(),
+    ),
+    GetPage(
+      name: RouteName.searchScreen,
+      page: () => SearchScreen(),
     ),
   ];
 }
