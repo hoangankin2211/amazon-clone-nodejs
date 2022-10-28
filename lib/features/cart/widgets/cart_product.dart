@@ -19,20 +19,27 @@ class _CartProductState extends State<CartProduct> {
   final homeController = Get.find<HomeController>();
   // final CartServices cartServices = CartServices();
 
-  void increaseQuantity(Product product) {
-    homeController.addProductToCart(product);
+  void increaseQuantity(Product product) async {
+    final result = await homeController.addProductToCart(product);
+    if (result) {
+      setState(() {});
+    }
   }
 
-  void decreaseQuantity(Product product) {
-    // cartServices.removeFromCart(
-    //   context: context,
-    //   product: product,
-    // );
+  void decreaseQuantity(Product product) async {
+    final result = await homeController.deleteProductInCart(product);
+    if (result) {
+      setState(() {});
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final productCart = GlobalVariables.userInfo!.carts[widget.index];
+    if (GlobalVariables.userInfo!.carts == null) {
+      return const Center(child: Text('NULL'));
+    }
+    print(widget.index);
+    final productCart = GlobalVariables.userInfo!.carts![widget.index];
     final product = productCart['product'] as Product;
     final quantity = productCart['quantity'] as int;
 

@@ -38,7 +38,7 @@ class AuthController extends GetxController {
         password: password,
         type: '',
         token: '',
-        carts: [],
+        carts: null,
       );
       final response = await http.post(
         Uri.parse(GlobalVariables.uri + ApiAddress.signUp),
@@ -105,9 +105,10 @@ class AuthController extends GetxController {
       final sharedPreference = await SharedPreferences.getInstance();
       String? token = sharedPreference.getString('token');
       if (token == null) {
+        print("false");
         return false;
       }
-
+      print('here');
       final response = await http.post(
         Uri.parse(GlobalVariables.uri + ApiAddress.checkToken),
         headers: {

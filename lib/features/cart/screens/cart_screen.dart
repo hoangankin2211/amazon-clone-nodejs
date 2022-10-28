@@ -1,6 +1,8 @@
 import 'package:amazon/constants/global_variables.dart';
+import 'package:amazon/features/address/screens/address_screen.dart';
 import 'package:amazon/models/product.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../../common/widgets/custom_button.dart';
 import '../widgets/cart_product.dart';
@@ -19,10 +21,12 @@ class _CartScreenState extends State<CartScreen> {
     final user = GlobalVariables.userInfo!;
     print(user.carts);
     int sum = 0;
-    user.carts
-        .map((e) => sum +=
-            (e['quantity'] as int) * (e['product'] as Product).price.toInt())
-        .toList();
+    if (user.carts != null) {
+      user.carts!
+          .map((e) => sum +=
+              (e['quantity'] as int) * (e['product'] as Product).price.toInt())
+          .toList();
+    }
 
     return Scaffold(
       appBar: PreferredSize(
@@ -139,9 +143,11 @@ class _CartScreenState extends State<CartScreen> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: CustomButton(
-                title: 'Proceed to Buy (${user.carts.length} items)',
-                // onTap: () => navigateToAddress(sum),
-                onTap: () {},
+                title:
+                    'Proceed to Buy (${user.carts == null ? 0 : user.carts!.length} items)',
+                onTap: () {
+                  Get.to(() => AddressScreen(totalAmount: sum.toString()));
+                },
               ),
             ),
             const SizedBox(height: 15),
@@ -151,7 +157,7 @@ class _CartScreenState extends State<CartScreen> {
             ),
             const SizedBox(height: 5),
             ListView.builder(
-              itemCount: user.carts.length,
+              itemCount: user.carts == null ? 0 : user.carts!.length,
               shrinkWrap: true,
               itemBuilder: (context, index) {
                 return CartProduct(

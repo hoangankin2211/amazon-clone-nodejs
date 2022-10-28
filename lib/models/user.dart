@@ -16,11 +16,11 @@ class User {
   final String name;
   final String password;
   final String email;
-  final String address;
+  String address;
   final String id;
   final String type;
   final String token;
-  final List<Map<String, dynamic>> carts;
+  List<Map<String, dynamic>>? carts;
 
   Map<String, String> toMap() {
     return {
@@ -31,6 +31,7 @@ class User {
       'id': id,
       'type': type,
       'token': token,
+      'carts': jsonEncode(carts),
     };
   }
 
@@ -46,15 +47,18 @@ class User {
     List<Map<String, dynamic>> carts = [];
 
     for (var element in extractCartData) {
+      Map<String, dynamic> data = {};
       (element as Map<String, dynamic>).forEach((key, value) {
-        Map<String, dynamic> data = {};
         if (key == 'product') {
           data.addAll({key: Product.fromMap(value as Map<String, dynamic>)});
         } else if (key == 'quantity') {
           data.addAll({key: value as int});
+        } else if (key == '_id') {
+          data.addAll({key: value as String});
         }
-        carts.add(data);
       });
+
+      carts.add(data);
     }
 
     print(carts);
@@ -70,5 +74,9 @@ class User {
       carts: carts,
     );
     return user;
+  }
+
+  void setUserAddress(String address) {
+    this.address = address;
   }
 }

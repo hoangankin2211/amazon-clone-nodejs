@@ -4,7 +4,7 @@ import '../models/user.dart';
 class GlobalVariables {
   //Jangnam = 10.0.21.222
   //At home = 192.168.1.182
-  static const String uri = 'http://10.0.21.222:3000';
+  static const String uri = 'https://amazozo.herokuapp.com';
   static late final User? userInfo;
 
   static const appBarGradient = LinearGradient(
@@ -79,6 +79,9 @@ class ApiAddress {
   static const searchProduct = '/api/product/search';
   static const dealOfTheDay = '/api/product/deal-of-the-day';
   static const addProductToCart = '/api/user/add-to-cart';
+  static const deleteProductInCart = '/api/user/delete-product-in-cart';
+  static const saveUserAddress = '/api/user/save-address';
+  static const order = '/api/user/order';
 
   static const sellProduct = '/admin/addProduct';
   static const getProduct = '/admin/getProduct';
